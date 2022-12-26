@@ -40,9 +40,12 @@ router.post("/feed", auth, async (req, res) => {
         // 글은 누가씀? 어떤새끼가 이글을 씀?
         const {userId} = res.locals.user.dataValues;
 
-        // DB저장을 하는데? 데이터 뭘넣어줄지를 제대로 확인하자!
-        await Feed.create({subject, content, userId});
-        return res.status(200).json({msg: "글 작성이 완료됨"});
+        if (userId) {
+            // DB저장을 하는데? 데이터 뭘넣어줄지를 제대로 확인하자!
+            await Feed.create({subject, content, userId});
+            
+            return res.status(200).json({msg: "글 작성이 완료됨"});   
+        }
     } catch (err) {
         console.log(err);
     }
